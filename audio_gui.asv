@@ -1,0 +1,140 @@
+function audio_gui()
+% AUDIO_GUI  File player with a saturation effect, wet/dry mix, and transport controls.
+%
+% Requires: DSP System Toolbox (dsp.AudioFileReader), Audio Toolbox (audioDeviceWriter)
+% Effect:   hard_saturate.m must be on the MATLAB path (same folder is fine).
+%
+% The GUI knows nothing about what the effect does. It only needs a function
+% of the form  y = effectFcn(x, amount)  where amount is in [0, 1].
+
+    % ---------- Effect (swap this one line to change the effect) ----------
+    effectFcn = @hard_saturate;
+
+    % ---------- State ----------
+    FRAME   = 1024;      % samples per processing block
+    reader  = [];        % file -> stream
+    writer  = [];        % stream -> sound card
+    playing = false;
+    amount  = 0.5;       % saturation knob, 0 to 1
+    mix     = 1.0;       % wet/dry knob, 0 = fully dry, 1 = fully wet
+
+    % ---------- GUI ----------
+    fig = uifigure('Name','AudioSynth','Position',[100 100 400 700], ...
+                   'CloseRequestFcn',@onClose);
+    g = uigridlayout(fig,[8 2]);
+    g.RowHeight = {32, 22, '1x', '1x', '1x', '1x', 22, 36};
+    g.ColumnWidth = {'1x', '4x'};
+
+    loadBtn = uibutton(g,'Text','Select audio file...','ButtonPushedFcn',@onLoad);
+    loadBtn.Layout.Row = 1;  loadBtn.Layout.Column = [1 2];
+
+    fileLbl = uilabel(g,'Text','No file loaded','HorizontalAlignment','center');
+    fileLbl.Layout.Row = 2;  fileLbl.Layout.Column = [1 2];
+
+    % ---- KNOBs ----
+    % ---- Saturation ----
+    satKnob = uiknob(g,'continuous','Limits',[0 100],'Value',0, ...
+                     'MajorTicks',[0 50 100], ...
+                     'ValueChangingFcn',@(~,e) satAmount(e.Value), ...
+                     'ValueChangedFcn', @(s,~) satAmount(s.Value));
+    satKnob.Layout.Row = 3;  satKnob.Layout.Column = 2;
+    satLbl = uilabel(g,'Text','Saturation','HorizontalAlignment','center');
+    satLbl.Layout.Row = 3;  satLbl.Layout.Column = 1;
+    % ---- Distortion ----
+    distortKnob = uiknob(g,'continuous','Limits',[0 100],'Value',0, ...
+                     'MajorTicks',[0 50 100], ...
+                     'ValueChangingFcn',@(~,e) distortAmount(e.Value), ...
+                     'ValueChangedFcn', @(s,~) distortAmount(s.Value));
+    distortKnob.Layout.Row = 4;  distortKnob.Layout.Column = 2;
+    distortLbl = uilabel(g,'Text','Distortion','HorizontalAlignment','center');
+    distortLbl.Layout.Row = 4;  distortLbl.Layout.Column = 1;
+
+    % ---- Compression ----
+    compressKnob = uiknob(g,'continuous','Limits',[0 100],'Value',0, ...
+                     'MajorTicks',[0 50 100], ...
+                     'ValueChangingFcn',@(~,e) compressAmount(e.Value), ...
+                     'ValueChangedFcn', @(s,~) compressAmount(s.Value));
+    compressKnob.Layout.Row = 5;  compressKnob.Layout.Column = 2;
+    compressLbl = uilabel(g,'Text','Compression','HorizontalAlignment','center');
+    compressLbl.Layout.Row = 5;  compressLbl.Layout.Column = 1;
+    % ---- WET/DRY ----
+    mixKnob = uiknob(g,'continuous','Limits',[0 100],'Value',100, ...
+                     'MajorTicks',[0 50 100],'MajorTickLabels',{'Dry','50','Wet'}, ...
+                     'ValueChangingFcn',@(~,e) mixAmount(e.Value), ...
+                     'ValueChangedFcn', @(s,~) mixAmount(s.Value));
+    mixKnob.Layout.Row = 6;  mixKnob.Layout.Column = 2;
+    mixLbl = uilabel(g,'Text','Wet / Dry','HorizontalAlignment','center');
+    mixLbl.Layout.Row = 6;  mixLbl.Layout.Column = 1;
+
+    % ---- BUTTONS -----
+    btnPanel = uigridlayout(g,[1 3],'Padding',[0 0 0 0]);
+    btnPanel.Layout.Row = 8;  btnPanel.Layout.Column = [1 2];
+    uibutton(btnPanel,'Text','Play',           'ButtonPushedFcn',@onPlay);
+    uibutton(btnPanel,'Text','Pause',          'ButtonPushedFcn',@onPause);
+    uibutton(btnPanel,'Text','From beginning', 'ButtonPushedFcn',@onRestart);
+
+    % ---------- Callbacks ----------
+    function satAmount(v)
+        satAmount = v/100;
+    end
+    function distortAmount(v)
+        distortAmount = v/100;
+    end
+    function compressAmount(v)
+        compressAmount = v/100;
+    end
+    function mixAmount(v)
+        mix = v/100;
+    end
+
+    function onLoad(~,~)
+        playing = false;                       % stop any running loop
+        [f,p] = uigetfile({'*.wav;*.flac;*.mp3;*.m4a','Audio files'});
+        if isequal(f,0), return; end
+        releaseAudio();
+        reader = dsp.AudioFileReader(fullfile(p,f),'SamplesPerFrame',FRAME);
+        writer = audioDeviceWriter('SampleRate',reader.SampleRate);
+        fileLbl.Text = sprintf('%s  (%g kHz)', f, reader.SampleRate/1000);
+    end
+
+    function onPlay(~,~)
+        if isempty(reader) || playing, return; end
+        playing = true;
+        while playing && isvalid(fig)
+            if isDone(reader)                  % reached end of file
+                reset(reader);
+                playing = false;
+                break
+            end
+            x   = reader();
+            wet = effectFcn(x, amount);        % effect runs here, once per block
+            wet = satu
+            nUnderrun = writer((1-mix)*x + mix*wet);   % blocks at the audio rate
+            if nUnderrun > 0
+                fprintf('underrun: %d samples\n', nUnderrun);
+            end
+            drawnow limitrate;                 % lets knobs/buttons be serviced
+        end
+    end
+
+    function onPause(~,~)
+        playing = false;
+    end
+
+    function onRestart(~,~)
+        if isempty(reader), return; end
+        reset(reader);
+        onPlay();                              % no-op if already playing
+    end
+
+    function onClose(~,~)
+        playing = false;
+        releaseAudio();
+        delete(fig);
+    end
+
+    function releaseAudio()
+        if ~isempty(reader), release(reader); end
+        if ~isempty(writer), release(writer); end
+    end
+end

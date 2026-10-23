@@ -1,0 +1,30 @@
+Overview:
+Analog in from laptop or guitar, goes through some cleaning/biasing and signal cleaning, and then to an ADC. ADC to FPGA through I2c or something, and then FPGA to DAC through I2c again.
+
+Single 5V supply in (probably from laptop USB to start w)
+
+__________________________
+Analog in:
+- 3.5mm from laptop:
+	- Doesn't need high impedance
+- 1/4" from guitar:
+	- Needs high impedance
+	
+Op-amp - OPA2365 - Good low noise at 5V level and high impedance
+
+ADC
+
+LDO - 
+	- We need low noise in the power supply so that we start with low noise from
+		the input side
+
+Gain Pot -
+
+
+Notes:
+___________________________
+Analog Out:
+- Output to a guitar amp
+- Output to headphones or stereo
+
+- DAC - 

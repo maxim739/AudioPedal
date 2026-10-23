@@ -1,0 +1,36 @@
+- Work on making the pedals work and sound good when connected to my computer in MATLAB
+	- Get a way to have an input from an instrument like the keyboard or a bass or something
+	- Do the live control with a MATLAB program where I can fiddle with knobs and things as if it was on the real product
+
+- Once it is working and we have some real valuable things going on, then we start to think about how it will map physically.
+-Talk to Radin, rachel, and any other band people I know to see how valuable it is to them and what features they would pay for to have, especially live
+	- What else do they use that's already on the market?
+	
+Look at narrowband FM and how signals get that flat sound, and how you can make
+	a signal seem wider with the opposite. It would be interesting to get some
+	of those signal processes to make the signals seem more analog or vintage
+	in a digital way
+	
+Distort:
+Saturation:
+- soft/overdrive - soft clipping
+- hard - hard clipping
+- fuzz - Squash to square
+- Some sort of saw tooth wave thing?
+- Analog type/ warm
+Compression:
+- Sustain - Level where compressor starts working
+- Attack - How fast it starts once you hit a string
+- Release - How fast compression stops
+- Ratio - How much it gets squashed once at threshold
+- Blend - wet/dry
+
+Harmonizer:
+- Add harmonies
+- Autotune
+
+Delay:
+- Echo
+
+Function generator:
+- Mix in an evelope that the rest of the music responds to

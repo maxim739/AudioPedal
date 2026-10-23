@@ -1,0 +1,29 @@
+Look at intelliJ and the rainmaker, or whatever else prof Clark has come up with
+Look at other audio products that have become sucessful, and why they have
+Look at other audio premium products and what they provide, the price they are at, and their selling points.
+	- What are existing products that people want that we could make cheap
+	- what are gaps in the market that we can fill and charge a premium for
+		- this can be a combination of services that would be nice to be combined together
+		- This could be a device that is usually reserved for computers, but we can make it happen in a smaller form factor and work live
+		- Is there anything a sound engineer does that we could make work with this device?
+
+FPGA Product:
+- Could be used during recording in studios for live tuning that the engineer and artist could control live so that everyone gets a high quality sound for what is happening live, without having to wait for it to happen in post production. Basically a live version of music editing
+- Live performances as a very capable pedal, able to do live changes and upload different profiles for different songs. You can link up to three software "pedals" that the artist has physical controls for, and a screen to show what is going on.
+- Software controls for loading and changing the connections of virtual pedals, and changing what each physical control is configured to, and how much effect the pedals have, etc
+	Components: *FPGA*, DAC, ADC, Controls, screen?, pre/post cleanliness
+	Cost: Higher - ~200? I need to do some market research and factor in my TIME
+
+Some sort of DSP/Microcontroller Product:
+- Very customizable tool for live performances or even studio work that can have some nice effects that
+- Could have some sort of companion app for the PC that can control which type of effect or type of effect the pedal has, or a combinaiton of them. Useful for live performances and unique sounds and customizability.
+	Compents: Microcontroller, ADC, DAC, Controls, pre/post cleaning
+	Cost: ~100? Need to factor in my time
+
+FPGA Segment and Demand:
+- More professional and performance oriented - the artist will need to have a good knowledge of how the pedal works and spend some time to figure out how to get the most out of the product. They will be able to have a lot of control over their music, and will provide a product that is like being able to edit their music in post, but in real life.
+
+DSP/Microcontroller Segment and Demand:
+- More like a traditional pedal that has a little more capability than normal. They will be able to do all of the things that they want, but will need to have more know-how than normal, or just have to use the profiles that come automatically on the device
+- Would be good to make this version more intuitive than the FPGA version, with some way to select different profile by turning a knob and having some tactile click that makes it clear which profile has been selected
+	- Could have a 5 second "peak" switch that leads to the most extreme version of the filter so that the artist knows which profile they just switched to when they do. Its going to be hard to make this work without a screen. A screen wouldn't be the worst thing in the world - or even just a 7-seg display.

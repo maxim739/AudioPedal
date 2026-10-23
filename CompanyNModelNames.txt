@@ -1,0 +1,23 @@
+Concise Pedals
+Capable Pedal Co.
+Capable Audio
+Professional Pedals
+Computer Music
+Artist Audio
+Animal Audio Products
+Animalistic Audio
+Animal Professional Audio
+Foresight
+
+
+
+FPGA Pedal: Something that shows how capable the device is, and defines it as a flagship product that can be used in a professional and live setting.
+- Stallion
+- Octopus
+- 
+
+DSP/Microcontroller Pedal: A more underdog/capable/small form factor of good quality and capability for the form factor
+- Badger
+- Chamelion
+- Mink
+
